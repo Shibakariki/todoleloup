@@ -19,6 +19,14 @@ class TaskListFragment : Fragment() {
 
     private lateinit var adapter: TaskListAdapter
 
+    private val adapterListener: TaskListListener = object : TaskListListener {
+        override fun onClickDelete(task: Task) {
+            val newList = taskList - task
+            taskList = newList
+            adapter.submitList(newList)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,11 +42,14 @@ class TaskListFragment : Fragment() {
         adapter.submitList(taskList)
 
         binding.addButton.setOnClickListener {
-            val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}", description = "New task description")
+            val newTask = Task(
+                id = UUID.randomUUID().toString(),
+                title = "Task ${taskList.size + 1}",
+                description = "New task description"
+            )
             taskList = taskList + newTask
             refreshAdapter(taskList)
         }
-
     }
     private fun refreshAdapter(newList: List<Task>) {
         adapter.submitList(newList.toList()) // Créez une copie de la liste pour garantir la mise à jour de l'adaptateur

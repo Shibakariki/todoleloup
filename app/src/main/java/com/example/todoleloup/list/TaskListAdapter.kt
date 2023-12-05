@@ -19,6 +19,7 @@ object TaskDiffCallback : DiffUtil.ItemCallback<Task>() {
 
 class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TaskDiffCallback) {
 
+    var onClickDelete: (Task) -> Unit = {}
     class TaskViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(task: Task) {
