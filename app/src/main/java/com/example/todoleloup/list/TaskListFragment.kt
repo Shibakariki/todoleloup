@@ -8,6 +8,11 @@ import androidx.fragment.app.Fragment
 import com.example.todoleloup.databinding.FragmentTaskListBinding
 import java.util.UUID
 
+// Déclaration de l'interface
+interface TaskListListener {
+    fun onClickDelete(task: Task)
+}
+
 class TaskListFragment : Fragment() {
     private var taskList = listOf(
         Task(id = "id_1", title = "Task 1", description = "description 1"),
