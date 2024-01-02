@@ -11,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.todoleloup.detail.ui.theme.TodoleloupTheme
 import com.example.todoleloup.list.Task
-import java.util.*
 
 class DetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +38,7 @@ class DetailActivity : ComponentActivity() {
 fun Detail(task : Task?, onValidate: (Task) -> Unit) {
     var task by remember { mutableStateOf(task ?: Task("","","")) }
     var id by remember { mutableStateOf(task.id) }
-    var title by remember { mutableStateOf(task.title) }
+    var title by remember { mutableStateOf(task.content) }
     var description by remember { mutableStateOf(task.description) }
 
     Column(
@@ -63,7 +62,7 @@ fun Detail(task : Task?, onValidate: (Task) -> Unit) {
             label = { Text("Description") }
         )
         Button(onClick = {
-            onValidate(Task(id = id, title = title, description = description))
+            onValidate(Task(id = id, content = title, description = description))
         }) {
             Text(text = "Validate")
         }

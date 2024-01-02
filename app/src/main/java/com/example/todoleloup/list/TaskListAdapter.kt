@@ -29,7 +29,7 @@ class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TaskDi
         : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(task: Task) {
-            binding.taskTitle.text = task.title
+            binding.taskTitle.text = task.content
             binding.taskDescription.text = task.description
             binding.deleteButton.setOnClickListener {
                 deleteListener(task)
