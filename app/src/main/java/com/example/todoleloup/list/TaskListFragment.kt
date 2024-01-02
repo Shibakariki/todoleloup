@@ -4,14 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import com.example.todoleloup.databinding.FragmentTaskListBinding
 import java.util.UUID
-
-// Déclaration de l'interface
-interface TaskListListener {
-    fun onClickDelete(task: Task)
-}
 
 class TaskListFragment : Fragment() {
     private var taskList = listOf(
@@ -19,18 +15,11 @@ class TaskListFragment : Fragment() {
         Task(id = "id_2", title = "Task 2"),
         Task(id = "id_3", title = "Task 3")
     )
+
     private var _binding: FragmentTaskListBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var adapter: TaskListAdapter
-
-    private val adapterListener: TaskListListener = object : TaskListListener {
-        override fun onClickDelete(task: Task) {
-            val newList = taskList - task
-            taskList = newList
-            adapter.submitList(newList)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +32,11 @@ class TaskListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = TaskListAdapter()
+        adapter.onClickDelete = { task ->
+            taskList = taskList.filter { it.id != task.id }
+            adapter.submitList(taskList)
+        }
+
         binding.recyclerview.adapter = adapter
         adapter.submitList(taskList)
 
