@@ -20,13 +20,22 @@ object TaskDiffCallback : DiffUtil.ItemCallback<Task>() {
 class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TaskDiffCallback) {
 
     var onClickDelete: (Task) -> Unit = {}
+    var onClickEdit: (Task) -> Unit = {}
 
-    class TaskViewHolder(private val binding: ItemTaskBinding, val deleteListener: (Task) -> Unit) : RecyclerView.ViewHolder(binding.root) {
+    class TaskViewHolder(
+        private val binding: ItemTaskBinding,
+        val deleteListener: (Task) -> Unit,
+        val editListener: (Task) -> Unit)
+        : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(task: Task) {
             binding.taskTitle.text = task.title
             binding.taskDescription.text = task.description
             binding.deleteButton.setOnClickListener {
                 deleteListener(task)
+            }
+            binding.editButton.setOnClickListener {
+                editListener(task)
             }
         }
     }
@@ -34,7 +43,7 @@ class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TaskDi
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemTaskBinding.inflate(layoutInflater, parent, false)
-        return TaskViewHolder(binding, onClickDelete)
+        return TaskViewHolder(binding, onClickDelete, onClickEdit)
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
