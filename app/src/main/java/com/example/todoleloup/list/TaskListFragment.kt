@@ -23,8 +23,8 @@ class TaskListFragment : Fragment() {
     private val viewModel: TasksListViewModel by viewModels()
     override fun onResume() {
         super.onResume()
-        // TODO: ça crash ici => viewModel.refresh()
-        /*lifecycleScope.launch {
+        viewModel.refresh()
+        lifecycleScope.launch {
             try {
                 // Supposons que Api.userWebService.fetchUser() est une méthode suspendue qui renvoie une réponse
                 val user = Api.userWebService.fetchUser().body()!!
@@ -36,7 +36,7 @@ class TaskListFragment : Fragment() {
                 // Pour cet exemple, nous allons simplement imprimer l'erreur
                 e.printStackTrace()
             }
-        }*/
+        }
     }
 
     private var _binding: FragmentTaskListBinding? = null
@@ -69,10 +69,16 @@ class TaskListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch { // on lance une coroutine car `collect` est `suspend`
-            /*viewModel.tasksStateFlow.collect { newList ->
-                // cette lambda est exécutée à chaque fois que la liste est mise à jour dans le VM
-                // -> ici, on met à jour la liste dans l'adapter
-            }*/
+            try {
+                viewModel.tasksStateFlow.collect { newList ->
+                    // Mettre à jour la liste dans l'adapter
+                    adapter.submitList(newList)
+                }
+            } catch (e: Exception) {
+                // Gérer l'erreur ici, par exemple en affichant un message à l'utilisateur
+                e.printStackTrace();
+                // Afficher un message d'erreur ou prendre d'autres mesures appropriées
+            }
         }
 
 
